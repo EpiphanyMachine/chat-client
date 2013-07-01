@@ -8,28 +8,29 @@ $(document).ready(function(){
       data: 'order=-createdAt',
       contentType: 'application/json',
       success: function(data){
-        // remove messages if more than 10
-          // remove div:eq > 20
+        // remove messages if more than 20
+        $('.messageContainer:gt(19)').remove();
         // add new messages
         for(var i = data.results.length - 1; i >= 0; i--){
-          // update timestamp for older messages
           if (data.results[i].createdAt <= lastPulled){
-            // for all divs
-            // if id =
-            // update created at
+            // update timestamp for older messages
+              // for all divs
+              // if id =
+              // update created at
           } else {
-          // make a new div for new messages
+          // make a new div for new messages and add data
             data.results[i].username = data.results[i].username || 'unknown';
-            var $tempContainer = $('<div class="messageContainer"></div>');
-            $tempContainer.prependTo('#main');
-            $tempContainer.append('<div class="created" />');
+            var $tempContainer = $('<div class="messageContainer"> \
+                                      <div class="created" /> \
+                                      <div class="username"><a href="#" class="usernameLink"/></div> \
+                                      <div class="text" /> \
+                                    </div>').prependTo('#main');
             $tempContainer.find('.created').text(moment(data.results[i].createdAt, "YYYY-MM-DDTHH:mm:ss.SSSZ").fromNow());
-            $tempContainer.append('<div class="username" />');
-            $tempContainer.find('.username').text('Username: ' + data.results[i].username);
-            $tempContainer.append('<div class="text" />');
+            $tempContainer.find('.usernameLink').text('@' + data.results[i].username);
             $tempContainer.find('.text').text(data.results[i].text);
           }
         }
+        lastPulled = data.results[0].createdAt;
         console.log(data);
       },
       error: function(data) {
@@ -59,16 +60,24 @@ $(document).ready(function(){
     });
   };
 
+  var user = {
+    friends: []
+  };
+  user.name = prompt('What is your username?', '') || 'guest';
+  $('#username').text(user.name + ': ');
+  updateMessages();
+
   $('#newMessage').on('submit', function(e){
     e.preventDefault();
     sendMessage($('input').val());
     $('input').val(null);
   });
 
-  var user = {};
-  user.name = prompt('What is your username?', '') || 'guest';
-  $('#username').text('Welcome ' + user.name);
-  updateMessages();
+  $('.usernameLink').on('click', function(e){
+    e.preventDefault();
+    user.friends.push(this.text());
+  });
+
 
 });
 
