@@ -44,3 +44,7 @@ body {
 
 .created {float:right;}
 
+.text {
+    word-break: break-all;
+}
+

@@ -1,24 +1,20 @@
 $(document).ready(function(){
 
-  var updateMessages = function(){
-    var lastPulled = lastPulled || '1900-01-01T00:00:00.000Z';
+  var updateMessages = function(lastPulled){
+    lastPulled = lastPulled || '1900-01-01T00:00:00.000Z';
     $.ajax({
       type: "GET",
       url: 'https://api.parse.com/1/classes/messages',
-      data: 'order=-createdAt',
+      // data: 'order=-createdAt',
+      // data: 'where={"createdAt":{"$gte":' + lastPulled + '}}',
+      // order=-createdAt&limit=20
+      data: 'where={"createdAt":{"$gte":{"__type":"Date","iso":"' + lastPulled + '"}}}&order=-createdAt&limit=20',
       contentType: 'application/json',
       success: function(data){
         // remove messages if more than 20
         $('.messageContainer:gt(19)').remove();
         // add new messages
         for(var i = data.results.length - 1; i >= 0; i--){
-          if (data.results[i].createdAt <= lastPulled){
-            // update timestamp for older messages
-              // for all divs
-              // if id =
-              // update created at
-          } else {
-          // make a new div for new messages and add data
             data.results[i].username = data.results[i].username || 'unknown';
             var $tempContainer = $('<div class="messageContainer"> \
                                       <div class="created" /> \
@@ -28,16 +24,16 @@ $(document).ready(function(){
             $tempContainer.find('.created').text(moment(data.results[i].createdAt, "YYYY-MM-DDTHH:mm:ss.SSSZ").fromNow());
             $tempContainer.find('.usernameLink').text('@' + data.results[i].username);
             $tempContainer.find('.text').text(data.results[i].text);
-          }
         }
         lastPulled = data.results[0].createdAt;
         console.log(data);
+        setTimeout(updateMessages, 5000, lastPulled);
       },
       error: function(data) {
         console.log('Ajax request failed');
       }
     });
-    setTimeout(updateMessages, 3000);
+    console.log(lastPulled);
   };
 
   var sendMessage = function(message){
