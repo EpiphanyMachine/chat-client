@@ -21,6 +21,9 @@ $(document).ready(function(){
                                       <div class="username"><a href="#" class="usernameLink"/></div> \
                                       <div class="text" /> \
                                     </div>').prependTo('#main');
+            for (var key in user.friends) {
+              key === data.results[i].username && $tempContainer.addClass('friend');
+            }
             $tempContainer.find('.created').text(moment(data.results[i].createdAt, "YYYY-MM-DDTHH:mm:ss.SSSZ").fromNow());
             $tempContainer.find('.usernameLink').text('@' + data.results[i].username);
             $tempContainer.find('.text').text(data.results[i].text);
@@ -57,9 +60,18 @@ $(document).ready(function(){
   };
 
   var user = {
-    friends: []
+    friends: {}
   };
-  user.name = prompt('What is your username?', '') || 'guest';
+
+  // check is username is passed in the url, if not promt for it
+  if(/username/i.test(location.href)) {
+    var loc = location.href.split('username=');
+    loc = loc[1].split('&');
+    user.name = loc[0];
+  } else {
+    user.name = prompt('What is your username?', '') || 'guest';
+  }
+
   $('#username').text(user.name + ': ');
   updateMessages();
 
@@ -69,13 +81,11 @@ $(document).ready(function(){
     $('input').val(null);
   });
 
-  $('.usernameLink').on('click', function(e){
+  $('#main').delegate('.usernameLink', 'click', function(e){
     e.preventDefault();
-    user.friends.push(this.text());
+    user.friends[$(this).text().substring(1)] = true;
+    //console.log(user.friends);
+    console.log(user.friends);
   });
 
-
 });
-
-
-

@@ -40,11 +40,15 @@ body {
 }
 .messageContainer{
     border: 1px solid blue;
+    word-break: break-all;
+    overflow: hidden;
 }
 
-.created {float:right;}
+.created {
+    float: right;
+}
 
-.text {
-    word-break: break-all;
+.friend {
+    background-color: #c0c0c0;
 }
 
