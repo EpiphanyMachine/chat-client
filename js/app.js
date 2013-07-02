@@ -23,8 +23,8 @@ $(document).ready(function(){
           for(var i = data.results.length - 1; i >= 0; i--){
               data.results[i].username = data.results[i].username || 'unknown';
               var $tempContainer = $('<div class="messageContainer"> \
-                                        <div class="created" /> \
                                         <div class="username"><a href="#" class="usernameLink"/></div> \
+                                        <div class="created" /> \
                                         <div class="text" /> \
                                       </div>').prependTo('#main');
               for (var key in user.friends) {
