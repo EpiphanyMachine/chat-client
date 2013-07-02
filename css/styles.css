@@ -4,14 +4,18 @@ body {
     padding: 0 25px;
 }
 
-#main {
+#main, .sendContainer {
     width: 500px;
     margin: auto;
     text-align: left;
     background: white;
-    padding: 50px 60px;
+    padding: 10px 50px;
     border: solid #ddd;
     border-width: 0 1px 1px 1px;
+}
+.sendContainer {
+    border-bottom: none;
+    padding-top: 20px;
 }
 
 #main h1 {
@@ -50,5 +54,8 @@ body {
 
 .friend {
     background-color: #c0c0c0;
+}
+.loading{
+    background:url(loader.gif) no-repeat 50% 50%;
 }
 
